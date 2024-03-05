@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripTaskEFApp", "TripTaskEFApp\TripTaskEFApp.csproj", "{D1D6E14D-AB1C-4BC5-A831-2155FDF2DEC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPDAL", "IPDAL\IPDAL.csproj", "{67B6E41F-D458-40BC-8B6D-C01CB797087D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPBLL", "IPBLL\IPBLL.csproj", "{1E5E483B-19D1-4950-895F-FCEDD2444215}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D1D6E14D-AB1C-4BC5-A831-2155FDF2DEC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1D6E14D-AB1C-4BC5-A831-2155FDF2DEC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1D6E14D-AB1C-4BC5-A831-2155FDF2DEC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1D6E14D-AB1C-4BC5-A831-2155FDF2DEC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67B6E41F-D458-40BC-8B6D-C01CB797087D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67B6E41F-D458-40BC-8B6D-C01CB797087D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67B6E41F-D458-40BC-8B6D-C01CB797087D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67B6E41F-D458-40BC-8B6D-C01CB797087D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E5E483B-19D1-4950-895F-FCEDD2444215}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E5E483B-19D1-4950-895F-FCEDD2444215}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E5E483B-19D1-4950-895F-FCEDD2444215}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E5E483B-19D1-4950-895F-FCEDD2444215}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2B01B393-E222-4775-B63C-40517A999A7B}
+	EndGlobalSection
+EndGlobal

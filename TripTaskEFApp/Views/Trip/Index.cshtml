@@ -1,0 +1,245 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        loadData();
+    })
+
+    function loadData() {
+        $.ajax({
+            url: "/Trip/GetTrips",
+            type: "GET",
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                var html = '';
+                $.each(response, function (key, item) {
+                    html += '<tr>'
+                    html += '<td>' + item.Destination + '</td>';
+                    html += '<td>' + item.Description + '</td>';
+                    html += '<td>' + new Date(parseInt(item.StartDate.substr(6))).toLocaleDateString() + '</td>';
+                    html += '<td>' + new Date(parseInt(item.EndDate.substr(6))).toLocaleDateString() + '</td>';
+                    html += '<td><a href="#" onclick="return getTripById(' + item.TripId + ')">Edit Trip</a> |<a href="#" onClick="Delete(' + item.TripId + ')">Delete Trip</a></td>';
+                    html += '</tr>'
+                });
+                $('.tbody').html(html);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        })
+    }
+
+
+    function Add() {
+        var tripObj = {
+            Destination: $('#destination').val(),
+            Description: $('#description').val(),
+            StartDate: $('#startdate').val(),
+            EndDate: $('#enddate').val()
+        }
+
+        $.ajax({
+            url: "/Trip/AddTrip",
+            type: "POST",
+            data: JSON.stringify(tripObj),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+
+                if (response == true) {
+                    loadData();
+                    $('#myModal').modal('hide');
+                    $('.modal-backdrop').remove();
+                    
+                }
+                else {
+                    $('#errorMessage').text('Trip Start Date must be less than Trip End Date!');
+                }
+                //$('#myModal').modal('hide');
+                //$('.modal-backdrop').remove();
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        })
+    }
+
+    function getTripById(tripId) {
+
+        $.ajax({
+            url: "/Trip/GetTripById/" + tripId,
+            type: "GET",
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+
+                $('#tripid').val(response.TripId);
+                $('#destination').val(response.Destination);
+                $('#description').val(response.Description);
+
+                var startDate = new Date(parseInt(response.StartDate.substr(6))).toISOString().split('T')[0];
+                var endDate = new Date(parseInt(response.EndDate.substr(6))).toISOString().split('T')[0];
+
+                $('#startdate').val(startDate);
+                $('#enddate').val(endDate);
+
+                $('#myModal').modal('show');
+                $('#btnUpdate').show();
+                $('#btnAdd').hide();
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    function update() {
+
+        var tripObj = {
+            TripId: $('#tripid').val(),
+            Destination: $('#destination').val(),
+            Description: $('#description').val(),
+            StartDate: $('#startdate').val(),
+            EndDate: $('#enddate').val()
+        }
+
+        $.ajax({
+            url: "/Trip/UpdateTrip",
+            data: JSON.stringify(tripObj),
+            type:"POST",
+            contentType:"application/json",
+            dataType:"json",
+            success: function (response) {
+                loadData();
+                $('#myModal').modal('hide');
+                $('.modal-backdrop').remove();
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        })
+    }
+
+    function Delete(tripId) {
+        var ans = confirm('Are you sure you want to delete this trip?');
+        if (ans) {
+            $.ajax({
+                url: "/Trip/DeleteTrip/" + tripId,
+                //data: JSON.stringify({ tripId: tripId }),
+                type: "POST",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                success: function (response) {
+                    loadData();
+                },
+                error: function (errormessage) {
+                    if (errormessage.status == 401)
+                        alert('You are not authorized!');
+                }
+            });
+        }
+    }
+
+    function clearTextBoxes() {
+        $('#destination').val("");
+        $('#description').val("");
+        $('#startdate').val("");
+        $('#enddate').val("");
+        $('#btnUpdate').hide();
+        $('#btnAdd').show();
+    }
+
+</script>
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal" onclick="clearTextBoxes();">Add New Trip</button>
+@*<p style="color:red" id="errorMessage"></p>*@
+
+<center> <h2>My Upcoming Trips</h2></center>
+<br />
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <td>Destination</td>
+            <td>Description</td>
+            <td>Trip Start Date</td>
+            <td>Trip End Date</td>
+            <td>Action</td>
+        </tr>
+    </thead>
+    <tbody class="tbody">
+        @*Trip records will be populated here*@
+    </tbody>
+</table>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h4 class="modal-title">Add Trip</h4>
+                
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form>
+
+                    <input type="hidden" id="tripid" />
+
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="destination" placeholder="Destination of trip" />
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="description" placeholder="Description of trip" />
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="date" class="form-control" id="startdate" />
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="date" class="form-control" id="enddate" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <p style="color:red" id="errorMessage"></p>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" id="btnAdd" onclick="return Add();">Add</button>
+                <button type="button" class="btn btn-outline-primary" id="btnUpdate" onclick="update();">Update</button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+

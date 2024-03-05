@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ItineraryPlannerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Trip">
+          <Key>
+            <PropertyRef Name="TripId" />
+          </Key>
+          <Property Name="TripId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Destination" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="TripTask">
+          <Key>
+            <PropertyRef Name="TripTaskId" />
+          </Key>
+          <Property Name="TripTaskId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TripId" Type="int" />
+          <Property Name="TaskName" Type="nvarchar" MaxLength="50" />
+          <Property Name="TaskDescription" Type="nvarchar(max)" />
+          <Property Name="TaskDueDate" Type="datetime" />
+          <Property Name="IsCompleted" Type="bit" />
+        </EntityType>
+        <Association Name="FK__TripTask__TripId__4BAC3F29">
+          <End Role="Trip" Type="Self.Trip" Multiplicity="0..1" />
+          <End Role="TripTask" Type="Self.TripTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trip">
+              <PropertyRef Name="TripId" />
+            </Principal>
+            <Dependent Role="TripTask">
+              <PropertyRef Name="TripId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="usp_DeleteTrip" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TripId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_GetAllTrips" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="usp_GetTasks" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="tripId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_InsertTrip" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Destination" Type="nvarchar" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="usp_UpdateTrip" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TripId" Type="int" Mode="In" />
+          <Parameter Name="Destination" Type="nvarchar" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+        </Function>
+        <EntityContainer Name="ItineraryPlannerModelStoreContainer">
+          <EntitySet Name="Trip" EntityType="Self.Trip" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TripTask" EntityType="Self.TripTask" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__TripTask__TripId__4BAC3F29" Association="Self.FK__TripTask__TripId__4BAC3F29">
+            <End Role="Trip" EntitySet="Trip" />
+            <End Role="TripTask" EntitySet="TripTask" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ItineraryPlannerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Trip">
+          <Key>
+            <PropertyRef Name="TripId" />
+          </Key>
+          <Property Name="TripId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Destination" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="TripTasks" Relationship="Self.FK__TripTask__TripId__4BAC3F29" FromRole="Trip" ToRole="TripTask" />
+        </EntityType>
+        <EntityType Name="TripTask">
+          <Key>
+            <PropertyRef Name="TripTaskId" />
+          </Key>
+          <Property Name="TripTaskId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TripId" Type="Int32" />
+          <Property Name="TaskName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TaskDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TaskDueDate" Type="DateTime" Precision="3" />
+          <Property Name="IsCompleted" Type="Boolean" />
+          <NavigationProperty Name="Trip" Relationship="Self.FK__TripTask__TripId__4BAC3F29" FromRole="TripTask" ToRole="Trip" />
+        </EntityType>
+        <Association Name="FK__TripTask__TripId__4BAC3F29">
+          <End Role="Trip" Type="Self.Trip" Multiplicity="0..1" />
+          <End Role="TripTask" Type="Self.TripTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trip">
+              <PropertyRef Name="TripId" />
+            </Principal>
+            <Dependent Role="TripTask">
+              <PropertyRef Name="TripId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ItineraryPlannerEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Trips" EntityType="Self.Trip" />
+          <EntitySet Name="TripTasks" EntityType="Self.TripTask" />
+          <AssociationSet Name="FK__TripTask__TripId__4BAC3F29" Association="Self.FK__TripTask__TripId__4BAC3F29">
+            <End Role="Trip" EntitySet="Trips" />
+            <End Role="TripTask" EntitySet="TripTasks" />
+          </AssociationSet>
+          <FunctionImport Name="usp_DeleteTrip">
+            <Parameter Name="TripId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_GetAllTrips" ReturnType="Collection(ItineraryPlannerModel.usp_GetAllTrips_Result)" />
+          <FunctionImport Name="usp_GetTasks" ReturnType="Collection(ItineraryPlannerModel.usp_GetTasks_Result)">
+            <Parameter Name="tripId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_InsertTrip">
+            <Parameter Name="Destination" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="usp_UpdateTrip">
+            <Parameter Name="TripId" Mode="In" Type="Int32" />
+            <Parameter Name="Destination" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="usp_GetAllTrips_Result">
+          <Property Type="Int32" Name="TripId" Nullable="false" />
+          <Property Type="String" Name="Destination" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Description" Nullable="true" />
+          <Property Type="DateTime" Name="StartDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="EndDate" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="usp_GetTasks_Result">
+          <Property Type="Int32" Name="TripTaskId" Nullable="false" />
+          <Property Type="Int32" Name="TripId" Nullable="true" />
+          <Property Type="String" Name="TaskName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TaskDescription" Nullable="true" />
+          <Property Type="DateTime" Name="TaskDueDate" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="IsCompleted" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ItineraryPlannerModelStoreContainer" CdmEntityContainer="ItineraryPlannerEntities">
+          <EntitySetMapping Name="Trips">
+            <EntityTypeMapping TypeName="ItineraryPlannerModel.Trip">
+              <MappingFragment StoreEntitySet="Trip">
+                <ScalarProperty Name="TripId" ColumnName="TripId" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TripTasks">
+            <EntityTypeMapping TypeName="ItineraryPlannerModel.TripTask">
+              <MappingFragment StoreEntitySet="TripTask">
+                <ScalarProperty Name="TripTaskId" ColumnName="TripTaskId" />
+                <ScalarProperty Name="TripId" ColumnName="TripId" />
+                <ScalarProperty Name="TaskName" ColumnName="TaskName" />
+                <ScalarProperty Name="TaskDescription" ColumnName="TaskDescription" />
+                <ScalarProperty Name="TaskDueDate" ColumnName="TaskDueDate" />
+                <ScalarProperty Name="IsCompleted" ColumnName="IsCompleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="usp_DeleteTrip" FunctionName="ItineraryPlannerModel.Store.usp_DeleteTrip" />
+          <FunctionImportMapping FunctionImportName="usp_GetAllTrips" FunctionName="ItineraryPlannerModel.Store.usp_GetAllTrips">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ItineraryPlannerModel.usp_GetAllTrips_Result">
+                <ScalarProperty Name="TripId" ColumnName="TripId" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetTasks" FunctionName="ItineraryPlannerModel.Store.usp_GetTasks">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ItineraryPlannerModel.usp_GetTasks_Result">
+                <ScalarProperty Name="TripTaskId" ColumnName="TripTaskId" />
+                <ScalarProperty Name="TripId" ColumnName="TripId" />
+                <ScalarProperty Name="TaskName" ColumnName="TaskName" />
+                <ScalarProperty Name="TaskDescription" ColumnName="TaskDescription" />
+                <ScalarProperty Name="TaskDueDate" ColumnName="TaskDueDate" />
+                <ScalarProperty Name="IsCompleted" ColumnName="IsCompleted" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_InsertTrip" FunctionName="ItineraryPlannerModel.Store.usp_InsertTrip" />
+          <FunctionImportMapping FunctionImportName="usp_UpdateTrip" FunctionName="ItineraryPlannerModel.Store.usp_UpdateTrip" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
